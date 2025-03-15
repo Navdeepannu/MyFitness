@@ -1,13 +1,15 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
+import HomeScreen from "./screens/HomeScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import WorkoutScreen from "./screens/WorkoutScreen";
-import MealStack from "./stackNavigation/MealStack.js";
+import NutritionTracker from "./screens/NutritionTracker"; // Import the NutritionTracker screen
+import globalStyles from "./shared/globalStyles";
 
-// initate bottom tabs
+// Initiate bottom tabs
 const Tab = createBottomTabNavigator();
 
 export default function App() {
@@ -17,12 +19,14 @@ export default function App() {
         screenOptions={({ route }) => ({
           tabBarIcon: ({ color, size }) => {
             let iconName;
-            if (route.name === "Macros") {
-              iconName = "food";
+            if (route.name === "Home") {
+              iconName = "home";
             } else if (route.name === "Workout") {
               iconName = "dumbbell";
             } else if (route.name === "Profile") {
               iconName = "account";
+            } else if (route.name === "Nutrition") {
+              iconName = "food"; // Icon for NutritionTracker
             }
             return (
               <MaterialCommunityIcons
@@ -42,8 +46,9 @@ export default function App() {
           headerShown: false,
         })}
       >
-        <Tab.Screen name="Macros" component={MealStack} />
+        <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Workout" component={WorkoutScreen} />
+        <Tab.Screen name="Nutrition" component={NutritionTracker} />
         <Tab.Screen name="Profile" component={ProfileScreen} />
       </Tab.Navigator>
     </NavigationContainer>
