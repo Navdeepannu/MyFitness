@@ -3,6 +3,8 @@ import globalStyles from "../shared/globalStyles";
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 
 import CurrentDate from "../components/CurrentDate";
+import NutritionDisplay from "../components/NutritionDisplay";
+import Meals from "../components/Meals";
 
 const HomeScreen = () => {
   return (
@@ -11,6 +13,10 @@ const HomeScreen = () => {
         <View>
           <CurrentDate />
           <Text style={globalStyles.title}>Daily Macros</Text>
+
+          <NutritionDisplay />
+
+          <Meals />
         </View>
       </SafeAreaView>
     </SafeAreaProvider>
