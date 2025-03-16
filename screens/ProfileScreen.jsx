@@ -27,7 +27,6 @@ const ProfileScreen = () => {
 
   const handleLogout = () => {
     alert("Logging out...");
-    // Add your logout logic here
   };
 
   return (
