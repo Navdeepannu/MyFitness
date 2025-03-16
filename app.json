@@ -12,6 +12,10 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "extra": {
+      "API_ID": "da0a206e",
+      "API_KEY": "8e79acf84c04b34e877459d6925f6134"
+    },
     "ios": {
       "supportsTablet": true
     },

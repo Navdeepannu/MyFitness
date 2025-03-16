@@ -3,11 +3,10 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import HomeScreen from "./screens/HomeScreen";
+import MealStack from "./stackNavigation/MealStack";
 import ProfileScreen from "./screens/ProfileScreen";
 import WorkoutScreen from "./screens/WorkoutScreen";
 import NutritionTracker from "./screens/NutritionTracker"; // Import the NutritionTracker screen
-import globalStyles from "./shared/globalStyles";
 
 // Initiate bottom tabs
 const Tab = createBottomTabNavigator();
@@ -19,8 +18,8 @@ export default function App() {
         screenOptions={({ route }) => ({
           tabBarIcon: ({ color, size }) => {
             let iconName;
-            if (route.name === "Home") {
-              iconName = "home";
+            if (route.name === "Macros") {
+              iconName = "food";
             } else if (route.name === "Workout") {
               iconName = "dumbbell";
             } else if (route.name === "Profile") {
@@ -46,7 +45,7 @@ export default function App() {
           headerShown: false,
         })}
       >
-        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Macros" component={MealStack} />
         <Tab.Screen name="Workout" component={WorkoutScreen} />
         <Tab.Screen name="Nutrition" component={NutritionTracker} />
         <Tab.Screen name="Profile" component={ProfileScreen} />

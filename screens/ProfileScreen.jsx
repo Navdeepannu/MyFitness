@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Text, View, Button, Switch, StyleSheet, TextInput } from "react-native";
+import { Text, View, Button, StyleSheet, TextInput } from "react-native";
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import globalStyles from "../shared/globalStyles";
 
 const ProfileScreen = () => {
-  const [darkMode, setDarkMode] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+
   const [profile, setProfile] = useState({
     name: "John Doe",
     age: 25,
@@ -75,15 +75,22 @@ const ProfileScreen = () => {
             </View>
           )}
 
-          <Button title={isEditing ? "Save" : "Edit Profile"} onPress={handleEdit} />
+          <Button
+            title={isEditing ? "Save" : "Edit Profile"}
+            onPress={handleEdit}
+          />
 
           <View style={styles.progressContainer}>
-            <Text style={styles.profileText}>Meals Logged: {profile.mealsLogged}</Text>
-            <Text style={styles.profileText}>Workouts Completed: {profile.workoutsCompleted}</Text>
-            <Text style={styles.profileText}>Current Streak: {profile.streak} Days</Text>
+            <Text style={styles.profileText}>
+              Meals Logged: {profile.mealsLogged}
+            </Text>
+            <Text style={styles.profileText}>
+              Workouts Completed: {profile.workoutsCompleted}
+            </Text>
+            <Text style={styles.profileText}>
+              Current Streak: {profile.streak} Days
+            </Text>
           </View>
-
-          
 
           <Button title="Logout" onPress={handleLogout} color="red" />
         </View>

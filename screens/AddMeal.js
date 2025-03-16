@@ -27,7 +27,7 @@ const AddMeal = () => {
       <Button
         title="Add Meal"
         onPress={() => {
-          /* Add your logic here */
+          
         }}
       />
     </SafeAreaView>
@@ -37,11 +37,11 @@ const AddMeal = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 10, // Ensure content starts from the top
-    justifyContent: "flex-start", // Align content to the top
+    paddingTop: 10, 
+    justifyContent: "flex-start", 
     alignItems: "center",
     backgroundColor: "#1C1D2D",
-    paddingHorizontal: 20, // Add horizontal padding to the container
+    paddingHorizontal: 20, 
   },
   title: {
     fontSize: 22,
@@ -50,8 +50,8 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     width: "100%",
-    marginTop: 30, // Adds space from the top to the input field
-    marginBottom: 20, // Space between search bar and button
+    marginTop: 30, 
+    marginBottom: 20,
   },
   searchInput: {
     height: 40,

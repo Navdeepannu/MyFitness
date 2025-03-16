@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, FlatList, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  FlatList,
+  StyleSheet,
+} from "react-native";
+import Constants from "expo-constants";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const NutritionTracker = () => {
   const [query, setQuery] = useState("");
@@ -7,9 +16,9 @@ const NutritionTracker = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Nutritionix API credentials
-  const APP_ID = "da0a206e"; // Replace with your Nutritionix App ID
-  const APP_KEY = "8e79acf84c04b34e877459d6925f6134"; // Replace with your Nutritionix App Key
+  // environment variables
+  const api_id = Constants.expoConfig.extra.API_ID;
+  const api_key = Constants.expoConfig.extra.API_KEY;
 
   // Fetch food data from Nutritionix API
   const searchFoods = async () => {
@@ -28,8 +37,8 @@ const NutritionTracker = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "x-app-id": APP_ID,
-            "x-app-key": APP_KEY,
+            "x-app-id": api_id,
+            "x-app-key": api_key,
           },
           body: JSON.stringify({
             query: query,
@@ -52,50 +61,60 @@ const NutritionTracker = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Calories Tracker</Text>
-      <View style={styles.searchContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter a food item (e.g., 2 slices of pizza)"
-          value={query}
-          onChangeText={setQuery}
-        />
-        <Button
-          title={loading ? "Searching..." : "Search"}
-          onPress={searchFoods}
-          disabled={loading}
+    <SafeAreaView style={styles.container}>
+      <View>
+        <Text style={styles.title}>Calories Tracker</Text>
+        <View style={styles.searchContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter a food item (e.g., 2 slices of pizza)"
+            value={query}
+            onChangeText={setQuery}
+          />
+          <Button
+            title={loading ? "Searching..." : "Search"}
+            onPress={searchFoods}
+            disabled={loading}
+          />
+        </View>
+
+        {error ? <Text style={styles.error}>{error}</Text> : null}
+
+        <FlatList
+          data={foods}
+          keyExtractor={(item) => item.food_name}
+          renderItem={({ item }) => (
+            <View style={styles.foodCard}>
+              <Text style={styles.foodName}>{item.food_name}</Text>
+              <Text>
+                <Text style={styles.label}>Calories: {item.nf_calories}</Text>
+              </Text>
+              <Text>
+                <Text style={styles.label}>
+                  Serving Size: {item.serving_qty} {item.serving_unit}
+                </Text>
+              </Text>
+              <Text>
+                <Text style={styles.label}>Protein: {item.nf_protein} g</Text>
+              </Text>
+              <Text>
+                <Text style={styles.label}>
+                  Carbs: {item.nf_total_carbohydrate} g
+                </Text>
+              </Text>
+              <Text>
+                <Text style={styles.label}>Fat: {item.nf_total_fat} g </Text>
+              </Text>
+            </View>
+          )}
+          ListEmptyComponent={
+            <Text style={styles.label}>
+              No foods found. Try searching for something else!
+            </Text>
+          }
         />
       </View>
-
-      {error ? <Text style={styles.error}>{error}</Text> : null}
-
-      <FlatList
-        data={foods}
-        keyExtractor={(item) => item.food_name}
-        renderItem={({ item }) => (
-          <View style={styles.foodCard}>
-            <Text style={styles.foodName}>{item.food_name}</Text>
-            <Text>
-              <Text style={styles.label}>Calories:</Text> {item.nf_calories}
-            </Text>
-            <Text>
-              <Text style={styles.label}>Serving Size:</Text> {item.serving_qty} {item.serving_unit}
-            </Text>
-            <Text>
-              <Text style={styles.label}>Protein:</Text> {item.nf_protein}g
-            </Text>
-            <Text>
-              <Text style={styles.label}>Carbs:</Text> {item.nf_total_carbohydrate}g
-            </Text>
-            <Text>
-              <Text style={styles.label}>Fat:</Text> {item.nf_total_fat}g
-            </Text>
-          </View>
-        )}
-        ListEmptyComponent={<Text>No foods found. Try searching for something else!</Text>}
-      />
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -133,6 +152,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   foodName: {
+    textTransform: "uppercase",
     fontSize: 18,
     fontWeight: "bold",
     color: "white",
