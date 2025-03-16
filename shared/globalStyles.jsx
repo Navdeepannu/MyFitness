@@ -65,6 +65,8 @@ const globalStyles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#2E303E",
   },
+
+  
 });
 
 export default globalStyles;
