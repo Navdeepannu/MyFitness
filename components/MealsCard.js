@@ -1,26 +1,35 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import plateImage from "../assets/plate1.png";
+import MealShortCard from "./MealShortCard";
 
-const MealCard = () => {
+const MealCard = ({ mealType }) => {
   const navigation = useNavigation();
-  const [mealSet, setMealSet] = useState(false);
+  const { currentMeals } = useSelector((state) => state.nutrition);
+
+  // Navigate to AddMeal with the specific meal type
+  const handleAddMeal = () => {
+    navigation.navigate("AddMeal", { mealType });
+  };
+  
+  // Filter meals by type
+  const mealsForType = currentMeals.filter(meal => meal.mealType === mealType);
 
   return (
     <View style={styles.card}>
       <View style={styles.flexHead}>
-        <Text style={styles.title}>Breakfast</Text>
+        <Text style={styles.title}>{mealType}</Text>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate("AddMeal")}
+          onPress={handleAddMeal}
         >
           <Ionicons name="add" size={24} color="white" />
         </TouchableOpacity>
       </View>
       <View>
-        {!mealSet ? (
+        {mealsForType.length === 0 ? (
           <View style={styles.emptyContainer}>
             <Image style={styles.image} source={plateImage} />
             <Text style={styles.emptyMessage}>
@@ -29,7 +38,14 @@ const MealCard = () => {
           </View>
         ) : (
           <View>
-            <Text>Meal added.</Text>
+            {mealsForType.map((meal) => (
+              <MealShortCard
+                key={meal.id}
+                food_name={meal.food_name}
+                totalCalories={meal.totalCalories}
+                Totalserving={meal.servings}
+              />
+            ))}
           </View>
         )}
       </View>

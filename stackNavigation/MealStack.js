@@ -18,7 +18,7 @@ const MealStack = () => {
             backgroundColor: "#1c1d2d",
           },
           headerTintColor: "white",
-          headerTitle: "Add Meal",
+          headerTitle: "Add Food",
           headerBackTitle: " ",
         }}
       />
