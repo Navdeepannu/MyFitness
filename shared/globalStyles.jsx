@@ -1,11 +1,11 @@
 import { StyleSheet } from "react-native";
-import NutritionDisplay from "../components/NutritionDisplay";
 
 const globalStyles = StyleSheet.create({
   ScreenContainer: {
     flex: 1,
     backgroundColor: "#1c1d2d",
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingTop: 5,
     color: "white",
   },
   title: {
@@ -65,8 +65,6 @@ const globalStyles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#2E303E",
   },
-
-  
 });
 
 export default globalStyles;

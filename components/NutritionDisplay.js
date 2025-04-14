@@ -1,12 +1,11 @@
 import React from "react";
 import { Text, View } from "react-native";
 import globalStyles from "../shared/globalStyles";
-
 import PieChart from "react-native-pie-chart";
 
 const NutritionDisplay = () => {
   const dummydata = [{ value: 1, color: "#24c778" }];
-  const pieSize = 130;
+  const pieSize = 120;
 
   return (
     <View style={globalStyles.nutritionDisplay}>
@@ -18,10 +17,12 @@ const NutritionDisplay = () => {
 
       {/* Nutrition Values display*/}
       <View style={globalStyles.nutritionValues}>
-        <Text style={globalStyles.nutritionText}>0(g)Protien</Text>
-        <Text style={globalStyles.nutritionText}>0(g)carbs</Text>
-        <Text style={globalStyles.nutritionText}>0(g)fat</Text>
-        <Text style={globalStyles.nutritionText}>Target Cals: 2000</Text>
+        <Text style={globalStyles.nutritionText}>0(g) Protein</Text>
+        <Text style={globalStyles.nutritionText}>0(g) Carbs</Text>
+        <Text style={globalStyles.nutritionText}>0(g) Fat</Text>
+        <Text style={[globalStyles.nutritionText, { color: "#A0A0A0" }]}>
+          Target: 2000 cal
+        </Text>
       </View>
     </View>
   );

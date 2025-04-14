@@ -8,9 +8,13 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import { useDispatch, useSelector } from 'react-redux';
-import { searchFoods, addMeal, clearSearchResults } from '../redux/slices/nutritionSlice';
-import { incrementMealsLogged } from '../redux/slices/userSlice';
+import { useDispatch, useSelector } from "react-redux";
+import {
+  searchFoods,
+  addMeal,
+  clearSearchResults,
+} from "../redux/slices/nutritionSlice";
+import { incrementMealsLogged } from "../redux/slices/userSlice";
 
 import { useNavigation, useRoute } from "@react-navigation/native";
 
@@ -22,7 +26,9 @@ const AddMeal = () => {
   const mealType = route.params?.mealType || "Breakfast";
 
   const dispatch = useDispatch();
-  const { searchResults, loading, error } = useSelector((state) => state.nutrition);
+  const { searchResults, loading, error } = useSelector(
+    (state) => state.nutrition
+  );
 
   // Handle serving size input change
   const handleServingChange = (foodName, value) => {
@@ -41,7 +47,7 @@ const AddMeal = () => {
     const enteredServing = servingSizes[meal.food_name] || 0;
     const mealWithServing = {
       ...meal,
-      id: Date.now(), // Generate a unique ID
+      id: Date.now(), // Generates a unique ID
       servings: enteredServing,
       totalCalories: (meal.nf_calories * enteredServing).toFixed(2),
       totalCarbs: (meal.nf_total_carbohydrate * enteredServing).toFixed(2),
@@ -55,9 +61,9 @@ const AddMeal = () => {
     dispatch(clearSearchResults());
     setQuery("");
     setServingSizes({});
-    
+
     // Navigate back to home screen
-    navigation.navigate('Macros');
+    navigation.navigate("Macros");
   };
 
   return (
@@ -90,7 +96,10 @@ const AddMeal = () => {
         data={searchResults}
         keyExtractor={(item) => item.food_name}
         renderItem={({ item }) => {
-          const enteredServing = servingSizes[item.food_name] || 0;
+          const enteredServing =
+            servingSizes[item.food_name] !== undefined
+              ? servingSizes[item.food_name]
+              : "1";
           const totalCalories = (item.nf_calories * enteredServing).toFixed(2);
           const totalCarbs = (
             item.nf_total_carbohydrate * enteredServing
@@ -137,6 +146,8 @@ const AddMeal = () => {
                 <TextInput
                   style={styles.servingInput}
                   keyboardType="numeric"
+                  placeholder="1"
+                  placeholderTextColor="white"
                   value={String(enteredServing)}
                   onChangeText={(value) =>
                     handleServingChange(item.food_name, value)

@@ -48,10 +48,20 @@ const nutritionSlice = createSlice({
   initialState,
   reducers: {
     setDailyGoals: (state, action) => {
-      state.dailyGoals = action.payload;
+      state.dailyGoals = {
+        ...state.dailyGoals,
+        ...action.payload
+      };
     },
     addMeal: (state, action) => {
-      state.currentMeals.push(action.payload);
+      const meal = action.payload;
+      // Calculate nutrition values if not provided
+      if (!meal.protein || !meal.carbs || !meal.fat) {
+        meal.protein = meal.protein || 0;
+        meal.carbs = meal.carbs || 0;
+        meal.fat = meal.fat || 0;
+      }
+      state.currentMeals.push(meal);
     },
     removeMeal: (state, action) => {
       state.currentMeals = state.currentMeals.filter(
@@ -60,6 +70,9 @@ const nutritionSlice = createSlice({
     },
     clearSearchResults: (state) => {
       state.searchResults = [];
+    },
+    resetNutrition: (state) => {
+      state.currentMeals = [];
     },
   },
   extraReducers: (builder) => {
@@ -79,7 +92,12 @@ const nutritionSlice = createSlice({
   },
 });
 
-export const { setDailyGoals, addMeal, removeMeal, clearSearchResults } =
-  nutritionSlice.actions;
+export const { 
+  setDailyGoals, 
+  addMeal, 
+  removeMeal, 
+  clearSearchResults,
+  resetNutrition 
+} = nutritionSlice.actions;
 
 export default nutritionSlice.reducer; 
