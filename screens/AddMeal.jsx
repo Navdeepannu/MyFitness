@@ -69,7 +69,9 @@ const AddMeal = () => {
     dispatch(clearSearchResults());
     setQuery("");
     setServingSizes({});
-    navigation.navigate("Macros");
+    setTimeout(() => {
+      navigation.navigate("HomeScreen");
+    }, 100);
   };
 
   return (

@@ -67,7 +67,7 @@ const Meals = () => {
           </View>
         ))}
       </View>
-      
+
       {/* Meal Type Selection Modal */}
       <Modal
         visible={showModal}
