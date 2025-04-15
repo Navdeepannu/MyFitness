@@ -31,12 +31,20 @@ const globalStyles = StyleSheet.create({
     left: 30,
     position: "absolute",
     textAlign: "center",
-    fontSize: 18,
+    fontSize: 20,
     color: "white",
+  },
+  nutritionValues: {
+    flexDirection: "column",
+    alignItems: "flex-start",
   },
   nutritionText: {
     color: "white",
     paddingTop: 10,
+    fontSize: 17,
+  },
+  targetView: {
+    paddingTop: 12,
   },
   mealsDisplay: {
     justifyContent: "space-between",

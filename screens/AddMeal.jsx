@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   View,
@@ -15,12 +15,11 @@ import {
   clearSearchResults,
 } from "../redux/slices/nutritionSlice";
 import { incrementMealsLogged } from "../redux/slices/userSlice";
-
 import { useNavigation, useRoute } from "@react-navigation/native";
 
 const AddMeal = () => {
   const [query, setQuery] = useState("");
-  const [servingSizes, setServingSizes] = useState({}); // Store serving size inputs
+  const [servingSizes, setServingSizes] = useState({});
   const navigation = useNavigation();
   const route = useRoute();
   const mealType = route.params?.mealType || "Breakfast";
@@ -30,24 +29,33 @@ const AddMeal = () => {
     (state) => state.nutrition
   );
 
-  // Handle serving size input change
+  useEffect(() => {
+    if (searchResults.length > 0) {
+      const initialSizes = {};
+      searchResults.forEach((item) => {
+        if (!servingSizes[item.food_name]) {
+          initialSizes[item.food_name] = "1";
+        }
+      });
+      setServingSizes((prev) => ({ ...initialSizes, ...prev }));
+    }
+  }, [searchResults]);
+
   const handleServingChange = (foodName, value) => {
-    const updatedServingSizes = { ...servingSizes, [foodName]: value };
-    setServingSizes(updatedServingSizes);
+    setServingSizes((prev) => ({ ...prev, [foodName]: value }));
   };
 
   const handleSearch = () => {
-    if (!query) {
-      return;
-    }
+    if (!query) return;
     dispatch(searchFoods(query));
   };
 
   const handleAddMeal = (meal) => {
-    const enteredServing = servingSizes[meal.food_name] || 0;
+    const enteredServing = parseFloat(servingSizes[meal.food_name]) || 1;
+
     const mealWithServing = {
       ...meal,
-      id: Date.now(), // Generates a unique ID
+      id: Date.now(),
       servings: enteredServing,
       totalCalories: (meal.nf_calories * enteredServing).toFixed(2),
       totalCarbs: (meal.nf_total_carbohydrate * enteredServing).toFixed(2),
@@ -61,8 +69,6 @@ const AddMeal = () => {
     dispatch(clearSearchResults());
     setQuery("");
     setServingSizes({});
-
-    // Navigate back to home screen
     navigation.navigate("Macros");
   };
 
@@ -78,9 +84,8 @@ const AddMeal = () => {
           placeholder="Search..."
           placeholderTextColor="gray"
           value={query}
-          onChangeText={(text) => setQuery(text)}
+          onChangeText={setQuery}
         />
-
         <TouchableOpacity
           style={styles.button}
           onPress={handleSearch}
@@ -90,7 +95,7 @@ const AddMeal = () => {
         </TouchableOpacity>
       </View>
 
-      <View>{error ? <Text style={styles.error}>{error}</Text> : null}</View>
+      {error ? <Text style={styles.error}>{error}</Text> : null}
 
       <FlatList
         data={searchResults}
@@ -98,8 +103,9 @@ const AddMeal = () => {
         renderItem={({ item }) => {
           const enteredServing =
             servingSizes[item.food_name] !== undefined
-              ? servingSizes[item.food_name]
-              : "1";
+              ? parseFloat(servingSizes[item.food_name])
+              : 1;
+
           const totalCalories = (item.nf_calories * enteredServing).toFixed(2);
           const totalCarbs = (
             item.nf_total_carbohydrate * enteredServing
@@ -140,7 +146,6 @@ const AddMeal = () => {
                 <Text style={styles.infoText}>{totalFat} g</Text>
               </View>
 
-              {/* Input for serving size */}
               <View style={styles.inputRow}>
                 <Text style={styles.label}>Enter Serving Size:</Text>
                 <TextInput
@@ -148,12 +153,13 @@ const AddMeal = () => {
                   keyboardType="numeric"
                   placeholder="1"
                   placeholderTextColor="white"
-                  value={String(enteredServing)}
+                  value={servingSizes[item.food_name] ?? ""}
                   onChangeText={(value) =>
                     handleServingChange(item.food_name, value)
                   }
                 />
               </View>
+
               <TouchableOpacity
                 style={styles.addButton}
                 onPress={() => handleAddMeal(item)}

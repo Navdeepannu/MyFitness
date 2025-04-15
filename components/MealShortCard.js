@@ -10,9 +10,8 @@ const MealShortCard = ({ food_name, totalCalories, Totalserving }) => {
         <Text style={styles.text}>Servings: {Totalserving}</Text>
       </View>
       <Text style={styles.text}>
-        <Icon name="fire" style={styles.fireIcon} />
-        {totalCalories}
-        cal
+        <Icon name="fire" style={styles.fireIcon} />{" "}
+        <Text>{totalCalories} cal</Text>
       </Text>
     </View>
   );
