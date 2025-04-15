@@ -17,10 +17,22 @@ import globalStyles from "../shared/globalStyles";
 import CurrentDate from "../components/CurrentDate";
 
 const WORKOUT_TYPES = [
-  { id: 1, name: "Cardio", exercises: ["Running", "Cycling", "Swimming", "Jump Rope"] },
-  { id: 2, name: "Strength", exercises: ["Push-ups", "Pull-ups", "Squats", "Deadlifts"] },
+  {
+    id: 1,
+    name: "Cardio",
+    exercises: ["Running", "Cycling", "Swimming", "Jump Rope"],
+  },
+  {
+    id: 2,
+    name: "Strength",
+    exercises: ["Push-ups", "Pull-ups", "Squats", "Deadlifts"],
+  },
   { id: 3, name: "Flexibility", exercises: ["Yoga", "Stretching", "Pilates"] },
-  { id: 4, name: "HIIT", exercises: ["Burpees", "Mountain Climbers", "Jump Squats"] },
+  {
+    id: 4,
+    name: "HIIT",
+    exercises: ["Burpees", "Mountain Climbers", "Jump Squats"],
+  },
 ];
 
 const WorkoutScreen = () => {
@@ -103,7 +115,7 @@ const WorkoutScreen = () => {
           <View style={styles.modalOverlay}>
             <View style={styles.modalContent}>
               <Text style={styles.modalTitle}>Add Workout</Text>
-              
+
               {!selectedWorkout ? (
                 WORKOUT_TYPES.map((type) => (
                   <TouchableOpacity
@@ -143,7 +155,7 @@ const WorkoutScreen = () => {
                   </TouchableOpacity>
                 </>
               )}
-              
+
               <TouchableOpacity
                 style={styles.closeButton}
                 onPress={() => {
@@ -167,7 +179,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#1C1D2D",
-    padding: 16,
+    paddingTop: 16,
   },
   header: {
     marginBottom: 20,

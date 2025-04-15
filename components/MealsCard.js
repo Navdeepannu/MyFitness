@@ -67,10 +67,10 @@ const styles = StyleSheet.create({
   card: {
     padding: 16,
     borderWidth: 1,
-    borderColor: "#2E303E",
+    borderColor: "#303955",
     borderRadius: 10,
     marginBottom: 10,
-    marginTop: 10,
+    marginTop: 15,
   },
   title: {
     color: "white",
@@ -86,8 +86,8 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 21,
-    borderWidth: 2,
-    borderColor: "#2E303E",
+    borderWidth: 1,
+    borderColor: "#303955",
     alignItems: "center",
     justifyContent: "center",
   },

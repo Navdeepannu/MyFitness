@@ -29,11 +29,11 @@ const MealShortCard = ({
       <View style={styles.card}>
         <View>
           <Text style={styles.title}>{food_name.toUpperCase()}</Text>
-          <Text style={styles.text}>Servings: {Totalserving}</Text>
+          <Text style={styles.text}>servings: {Totalserving}</Text>
         </View>
-        <Text style={styles.text}>
+        <Text style={styles.calorieButton}>
           <Icon name="fire" style={styles.fireIcon} />{" "}
-          <Text>{totalCalories} cal</Text>
+          <Text>{Math.round(totalCalories)} cal</Text>
         </Text>
       </View>
     </Swipeable>
@@ -42,12 +42,14 @@ const MealShortCard = ({
 
 const styles = StyleSheet.create({
   card: {
-    padding: 15,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     marginTop: 10,
-    borderRadius: 20,
+    borderRadius: 50,
     borderWidth: 1,
-    borderColor: "#2E303E",
+    borderColor: "#303955",
     flexDirection: "row",
+    alignItems: "center",
     justifyContent: "space-between",
   },
   title: {
@@ -62,11 +64,20 @@ const styles = StyleSheet.create({
   },
   fireIcon: {
     fontSize: 15,
-    color: "#ff9103",
+    color: "#ff7500",
   },
   deleteView: {
     flexDirection: "row",
     alignItems: "center",
+  },
+  calorieButton: {
+    fontSize: 15,
+    fontWeight: "200",
+    color: "white",
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 100,
+    backgroundColor: "#303955",
   },
 });
 

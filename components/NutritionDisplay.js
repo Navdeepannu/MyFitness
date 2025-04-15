@@ -36,7 +36,15 @@ const NutritionDisplay = () => {
     <View style={globalStyles.nutritionDisplay}>
       {/* Chart Display */}
       <View style={globalStyles.chartWrapper}>
-        <Progress.Circle progress={progress} size={130} color={progressColor} />
+        {/* Outer circle */}
+        <Progress.Circle
+          progress={progress}
+          size={130}
+          color={progressColor}
+          borderWidth={0}
+          unfilledColor="#303955"
+          thickness={10}
+        />
         <Text style={globalStyles.chartText}>
           {isOver
             ? `Over ${overAmount}\ncalories`
@@ -58,7 +66,7 @@ const NutritionDisplay = () => {
         <Text style={globalStyles.targetView}>
           <Icon name="bar-graph" color={"#24c778"} size={20} />
           <Text style={[globalStyles.nutritionText, { color: "#DEDEDE" }]}>
-            Target: {dailyGoals.calories} cal
+            Target cals: {dailyGoals.calories}
           </Text>
         </Text>
       </View>

@@ -53,8 +53,8 @@ const globalStyles = StyleSheet.create({
     alignItems: "baseline",
   },
   button: {
-    borderWidth: 2,
-    borderColor: "#2E303E",
+    borderWidth: 1,
+    borderColor: "#303955",
     flexDirection: "row",
     alignItems: "center",
     borderRadius: 30,
