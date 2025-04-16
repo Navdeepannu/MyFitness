@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
   },
   emptyMessage: {
     color: "gray",
-    fontSize: 16,
+    fontSize: 15,
     fontStyle: "italic",
     marginTop: 10,
   },

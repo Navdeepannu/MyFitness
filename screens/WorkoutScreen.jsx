@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Text,
   View,
@@ -8,6 +8,7 @@ import {
   Modal,
   Alert,
   StyleSheet,
+  Animated,
 } from "react-native";
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
@@ -34,6 +35,15 @@ const WORKOUT_TYPES = [
     exercises: ["Burpees", "Mountain Climbers", "Jump Squats"],
   },
 ];
+
+const quotes = [
+  "Push yourself, because no one else is going to do it for you.",
+  "Success starts with self-discipline.",
+  "No pain, no gain. Shut up and train.",
+  "The body achieves what the mind believes.",
+];
+
+const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
 
 const WorkoutScreen = () => {
   const [showModal, setShowModal] = useState(false);
@@ -71,11 +81,30 @@ const WorkoutScreen = () => {
     Alert.alert("Success", "Workout logged successfully!");
   };
 
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 2000,
+      useNativeDriver: false,
+    }).start();
+  }, []);
+
   return (
     <SafeAreaProvider style={globalStyles.ScreenContainer}>
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
           <CurrentDate />
+
+          <Animated.View
+            style={[styles.inspirationSection, { opacity: fadeAnim }]}
+          >
+            <Text style={styles.quote}>{randomQuote}</Text>
+            <Text style={styles.exerciseOfTheDay}>
+              💪 Exercise of the Day: 20 Push-ups
+            </Text>
+          </Animated.View>
+
           <Text style={globalStyles.title}>Daily Workout</Text>
           <TouchableOpacity
             style={styles.addButton}
@@ -184,6 +213,25 @@ const styles = StyleSheet.create({
   header: {
     marginBottom: 20,
   },
+  inspirationSection: {
+    backgroundColor: "#2E303E",
+    padding: 16,
+    borderRadius: 10,
+    marginBottom: 20,
+    marginTop: 20,
+  },
+  quote: {
+    fontSize: 16,
+    fontStyle: "italic",
+    color: "#ffa726",
+    marginBottom: 10,
+  },
+  exerciseOfTheDay: {
+    fontSize: 16,
+    color: "#fff",
+    fontWeight: "500",
+  },
+
   addButton: {
     flexDirection: "row",
     alignItems: "center",
