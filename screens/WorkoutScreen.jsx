@@ -9,13 +9,16 @@ import {
   Alert,
   StyleSheet,
   Animated,
+  Platform,
 } from "react-native";
-import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
+import { Swipeable } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useDispatch, useSelector } from "react-redux";
 import { MaterialIcons } from "@expo/vector-icons";
-import { addWorkoutLog } from "../redux/slices/workoutSlice";
+import { addWorkoutLog, deleteWorkoutLog } from "../redux/slices/workoutSlice";
 import globalStyles from "../shared/globalStyles";
 import CurrentDate from "../components/CurrentDate";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const WORKOUT_TYPES = [
   {
@@ -43,16 +46,40 @@ const quotes = [
   "The body achieves what the mind believes.",
 ];
 
-const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+const getRandomExercise = () => {
+  const randomWorkoutType =
+    WORKOUT_TYPES[Math.floor(Math.random() * WORKOUT_TYPES.length)];
+  const randomExercise =
+    randomWorkoutType.exercises[
+      Math.floor(Math.random() * randomWorkoutType.exercises.length)
+    ];
+  return `💪 Exercise of the Day: ${randomExercise}`;
+};
 
 const WorkoutScreen = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedWorkout, setSelectedWorkout] = useState(null);
   const [duration, setDuration] = useState("");
   const [notes, setNotes] = useState("");
+  const [exerciseOfTheDay, setExerciseOfTheDay] = useState("");
+  const [quote, setQuote] = useState("");
 
   const dispatch = useDispatch();
   const { workoutLogs } = useSelector((state) => state.workout);
+
+  useEffect(() => {
+    setExerciseOfTheDay(getRandomExercise());
+    setQuote(quotes[Math.floor(Math.random() * quotes.length)]);
+  }, []);
+
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 2000,
+      useNativeDriver: false,
+    }).start();
+  }, []);
 
   const handleAddWorkout = (workout) => {
     setSelectedWorkout(workout);
@@ -67,6 +94,8 @@ const WorkoutScreen = () => {
 
     dispatch(
       addWorkoutLog({
+        id: Date.now(),
+        date: new Date().toISOString(),
         type: selectedWorkout.name,
         exercise: selectedWorkout.exercises[0],
         duration,
@@ -81,28 +110,26 @@ const WorkoutScreen = () => {
     Alert.alert("Success", "Workout logged successfully!");
   };
 
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const handleDeleteWorkout = (id) => {
+    dispatch(deleteWorkoutLog(id));
+    Alert.alert("Deleted", "Workout deleted successfully");
+  };
+
   useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 2000,
-      useNativeDriver: false,
-    }).start();
+    setExerciseOfTheDay(getRandomExercise());
   }, []);
 
   return (
-    <SafeAreaProvider style={globalStyles.ScreenContainer}>
-      <SafeAreaView style={styles.container}>
+    <SafeAreaView style={globalStyles.ScreenContainer}>
+      <View style={styles.container}>
         <View style={styles.header}>
           <CurrentDate />
 
           <Animated.View
             style={[styles.inspirationSection, { opacity: fadeAnim }]}
           >
-            <Text style={styles.quote}>{randomQuote}</Text>
-            <Text style={styles.exerciseOfTheDay}>
-              💪 Exercise of the Day: 20 Push-ups
-            </Text>
+            <Text style={styles.quote}>{quote}</Text>
+            <Text style={styles.exerciseOfTheDay}>{exerciseOfTheDay}</Text>
           </Animated.View>
 
           <Text style={globalStyles.title}>Daily Workout</Text>
@@ -115,23 +142,42 @@ const WorkoutScreen = () => {
           </TouchableOpacity>
         </View>
 
-        <ScrollView style={styles.workoutList}>
+        <ScrollView
+          style={styles.workoutList}
+          contentContainerStyle={{ paddingBottom: 100 }}
+        >
           {workoutLogs.map((log) => (
-            <View key={log.id} style={styles.workoutCard}>
-              <Text style={styles.workoutType}>{log.type}</Text>
-              <Text style={styles.workoutDetails}>
-                Exercise: {log.exercise}
-              </Text>
-              <Text style={styles.workoutDetails}>
-                Duration: {log.duration} minutes
-              </Text>
-              {log.notes && (
-                <Text style={styles.workoutNotes}>Notes: {log.notes}</Text>
+            <Swipeable
+              key={log.id}
+              renderRightActions={() => (
+                <TouchableOpacity
+                  style={styles.deleteButton}
+                  onPress={() => handleDeleteWorkout(log.id)}
+                >
+                  <Icon
+                    name="delete-forever-outline"
+                    size={40}
+                    color="#D84040"
+                  />
+                </TouchableOpacity>
               )}
-              <Text style={styles.workoutDate}>
-                {new Date(log.date).toLocaleDateString()}
-              </Text>
-            </View>
+            >
+              <View style={styles.workoutCard}>
+                <Text style={styles.workoutType}>{log.type}</Text>
+                <Text style={styles.workoutDetails}>
+                  Exercise: {log.exercise}
+                </Text>
+                <Text style={styles.workoutDetails}>
+                  Duration: {log.duration} minutes
+                </Text>
+                {log.notes && (
+                  <Text style={styles.workoutNotes}>Notes: {log.notes}</Text>
+                )}
+                <Text style={styles.workoutDate}>
+                  {new Date(log.date).toLocaleDateString()}
+                </Text>
+              </View>
+            </Swipeable>
           ))}
         </ScrollView>
 
@@ -166,7 +212,9 @@ const WorkoutScreen = () => {
                     placeholderTextColor="gray"
                     value={duration}
                     onChangeText={setDuration}
-                    keyboardType="numeric"
+                    keyboardType={
+                      Platform.OS === "ios" ? "number-pad" : "numeric"
+                    }
                   />
                   <TextInput
                     style={styles.input}
@@ -199,8 +247,8 @@ const WorkoutScreen = () => {
             </View>
           </View>
         </Modal>
-      </SafeAreaView>
-    </SafeAreaProvider>
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -231,7 +279,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "500",
   },
-
   addButton: {
     flexDirection: "row",
     alignItems: "center",
@@ -278,6 +325,12 @@ const styles = StyleSheet.create({
     color: "#888",
     marginTop: 8,
     alignSelf: "flex-end",
+  },
+  deleteButton: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: 70,
+    height: "90%",
   },
   modalOverlay: {
     flex: 1,

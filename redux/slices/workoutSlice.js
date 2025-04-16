@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   workoutLogs: [],
@@ -8,7 +8,7 @@ const initialState = {
 };
 
 const workoutSlice = createSlice({
-  name: 'workout',
+  name: "workout",
   initialState,
   reducers: {
     addWorkoutLog: (state, action) => {
@@ -24,6 +24,11 @@ const workoutSlice = createSlice({
     clearCurrentWorkout: (state) => {
       state.currentWorkout = null;
     },
+    deleteWorkoutLog: (state, action) => {
+      state.workoutLogs = state.workoutLogs.filter(
+        (log) => log.id !== action.payload
+      );
+    },
     setLoading: (state, action) => {
       state.loading = action.payload;
     },
@@ -37,8 +42,9 @@ export const {
   addWorkoutLog,
   setCurrentWorkout,
   clearCurrentWorkout,
+  deleteWorkoutLog,
   setLoading,
   setError,
 } = workoutSlice.actions;
 
-export default workoutSlice.reducer; 
+export default workoutSlice.reducer;

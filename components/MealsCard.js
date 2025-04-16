@@ -42,7 +42,7 @@ const MealCard = ({ mealType }) => {
           <View style={styles.emptyContainer}>
             <Image style={styles.image} source={plateImage} />
             <Text style={styles.emptyMessage}>
-              This meal is empty, click + to add Meals.
+              This meal is empty, click + to add food.
             </Text>
           </View>
         ) : (
