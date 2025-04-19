@@ -2,11 +2,11 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   profile: {
-    name: "John Doe",
-    age: 25,
-    height: "175 cm",
-    weight: "70 kg",
-    goal: "Muscle Gain",
+    name: "",
+    age: null,
+    height: null,
+    weight: null,
+    goal: null,
   },
   stats: {
     mealsLogged: 0,
